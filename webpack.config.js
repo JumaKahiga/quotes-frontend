@@ -1,5 +1,7 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
 	entry: './src/index.js',
@@ -9,14 +11,6 @@ module.exports = {
 	},
 	module: {
 		rules: [
-		// {
-		// 	test: /\.css(\.js)?$/,
-		// 	exclude: /node_modules/,
-		// 	use: {
-		// 		loaders: ['style-loader', 'css-loader']
-		// 	}
-
-		// },
 		{
 			test: /\.js$/,
 			exclude: /node_modules/,
@@ -24,32 +18,24 @@ module.exports = {
 				loader: 'babel-loader'
 			}
 
+		},
+		{
+		test: /\.css$/,
+		use: ExtractTextPlugin.extract(
+		  {
+		    fallback: 'style-loader',
+		    use: ['css-loader']
+		  })
 		}
 		]
 	},
 	plugins: [
-	  new HtmlWebpackPlugin(
-	  {
-	  	template: './src/index.html'
-	  })
+		new HtmlWebpackPlugin(
+		{
+			template: './src/index.html'
+		}),
+		new ExtractTextPlugin('dist/styles/main.css', {
+		    allChunks: true
+		  }),
 	]
 };
-
-
-// module.exports = {
-//   entry: {
-//     index: 'src/index.js',
-//   },
-//   module: {
-//     loaders: [{
-//       test: /\.css(\.js)?$/,
-//       loaders: ['style-loader', 'css-loader'],
-//     }, {
-//       test: /\.css\.js$/,
-//       loader: 'css-js-loader',
-//     }, {
-//       test: /\.js$/,
-//       loader: 'babel-loader',
-//     }],
-//   },
-// };
