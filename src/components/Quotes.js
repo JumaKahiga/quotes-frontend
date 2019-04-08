@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dayQuote } from '../actions/postActions';
+import { fetchQuotes } from '../actions/postActions';
 
 
-class DayQuote extends Component {
+class Quotes extends Component {
 	componentWillMount() {
-		this.props.dayQuote();
+		this.props.fetchQuotes();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -17,31 +17,33 @@ class DayQuote extends Component {
 	}
 
 	render() {
-		const quoteItems = this.props.myQuote.map(quote =>(
+		const quoteItems = this.props.quotes.map(quote =>(
 			<div className="center" key>{ quote.id }
+				<h6>{ quote.author }</h6>
 				<p>{ quote.quote }</p>
-				<h6>Posted { quote.posted } ago by { quote.author }</h6>
+				<h6>Posted { quote.posted } ago</h6>
 			</div>
 			))
+		console.log(quoteItems);
 		return(
 		<div>
-			<h3 className="center">Quote of the Day</h3> <hr />
+			<h3 className="center">Quotes</h3> <hr />
 			{ quoteItems }
 		</div>
 		)
 	}
 }
 
-DayQuote.propTypes = {
-	dayQuote: PropTypes.func.isRequired,
+Quotes.propTypes = {
+	fetchQuotes: PropTypes.func.isRequired,
 	quotes: PropTypes.array.isRequired,
 	newQuote: PropTypes.object
 };
 
 const mapStateToProps = state => ({
 	quotes: state.quotes.items,
-	newQuote: state.quotes.item,
-	myQuote: state.quotes.select_item
+	newQuote: state.quotes.item
+
 });
 
-export default connect(mapStateToProps, { dayQuote })(DayQuote);
+export default connect(mapStateToProps, { fetchQuotes })(Quotes);
